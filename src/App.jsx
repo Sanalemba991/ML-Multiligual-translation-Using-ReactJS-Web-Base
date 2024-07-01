@@ -5,8 +5,18 @@ import FileDisplay from './components/FileDisplay'
 import Information from './components/Information'
 import Transcribing from './components/Transcribing'
 import { MessageTypes } from './utils/presets'
+import Creater from './components/Creater'
+import { createBrowserRouter } from 'react-router-dom'
+
 
 function App() {
+const router=createBrowserRouter(
+  [{
+    path:"/creator",
+    element:<Creater/>
+  }
+  ]
+)
   const [file, setFile] = useState(null)
   const [audioStream, setAudioStream] = useState(null)
   const [output, setOutput] = useState(null)
@@ -91,6 +101,7 @@ function App() {
         ) : (
           <HomePage setFile={setFile} setAudioStream={setAudioStream} />
         )}
+       
       </section>
       <footer></footer>
     </div>
