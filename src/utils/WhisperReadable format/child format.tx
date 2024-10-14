@@ -1,0 +1,81 @@
+
+chunkCallback(data) {
+Function Start: Imagine this function as a big box where we put something in (data). It's called chunkCallback.
+this.chunks.push(data);
+Putting Data In: We take the data and push it into a special place called this.chunks. It's like adding toys to a toy box.
+`const [text, { chunks }] = this.pipeline.tokenizer._decode_asr(
+kotlin
+Copy code
+        this.chunks,
+        {
+            time_precision: this.time_precision,
+            return_timestamps: true,
+            force_full_sequence: false
+        }
+    );`
+3. Turning Data Into Words: We use a special machine (this.pipeline.tokenizer._decode_asr) to turn the data we collected (this.chunks) into words that we can read. It also gives us some extra information about these words.
+
+`this.processed_chunks = chunks.map((chunk, index) => {
+kotlin
+Copy code
+        return this.processChunk(chunk, index);
+    });`
+4. Arranging the Words: Now, we take each piece of words and arrange them nicely. We use another helper (processChunk) to do this for each piece. Think of it like organizing toys into different boxes based on their type.
+
+createResultMessage(this.processed_chunks, false, this.getLastChunkTimestamp());
+Sending a Message: Finally, we put all these nicely organized words into a message and send it to someone. We also say if we're done or not (false means we're not done yet), and we tell them the time when we finished the last piece.
+getLastChunkTimestamp() {
+Checking Time: This is like looking at a clock to see when we finished the last piece of work.
+if (this.processed_chunks.length === 0) {
+Checking If We Did Anything: We check if we have any organized words yet. If not, we say we finished at time zero.
+return 0;
+Saying Time: We tell the time we finished, which is zero if we haven't started yet.
+const lastChunk = this.processed_chunks[this.processed_chunks.length - 1];
+Getting the Last Piece: We look at the very last piece of nicely organized words we made.
+return lastChunk.end;
+Saying the End Time: We tell the time when that last piece finished.
+processChunk(chunk, index) {
+Organizing Words: We take a piece of words (chunk) and give them a number (index). We also figure out when these words started and ended.
+}
+Finishing the Organizing: We finish organizing these words and their times.
+function createResultMessage(results, isDone, completedUntilTimestamp) {
+Sending a Full Message: We put all the organized words (results) into a message. We also say if we're done or not (isDone), and we tell them when we finished the last piece (completedUntilTimestamp).
+function createPartialResultMessage(result) {
+Sending a Part of Message: Sometimes, we don't have all the words organized yet, but we want to tell someone what we have so far. So, we send a part of our message (result) to them.
+In simple terms, this code is like collecting toys (data), putting them in boxes (chunks), turning them into words we can read (decode_asr), organizing these words nicely (processChunk), and then either sending a complete message (createResultMessage) or a partial one (createPartialResultMessage) to someone else. It's about managing and sharing information in a way that's easy to understand and use.
+
+
+
+chunkCallback(data) {
+Function Start: This is like a special box where we put new information (data) whenever we get it.
+this.chunks.push(data);
+Adding Data: We take the new information (data) and put it in a box called chunks. It's like adding a new toy to our collection.
+const [text, { chunks }] = this.pipeline.tokenizer._decode_asr(
+Turning Data into Words: Now, we use a magic machine (this.pipeline.tokenizer._decode_asr) to turn all the information we collected (this.chunks) into words that we can read.
+this.processed_chunks = chunks.map((chunk, index) => {
+Organizing the Words: Next, we take each set of words and organize them nicely. We give each set a number and make sure they're in order.
+return this.processChunk(chunk, index);
+Preparing Each Set: For each set of words, we do some special work (processChunk) to make sure they're ready to show to someone.
+createResultMessage(this.processed_chunks, false, this.getLastChunkTimestamp());
+Sending a Message: Finally, we put all the organized sets of words into a message and send it to someone. We also say if we're done or not (false means we're not done yet), and we tell them when we finished the last set of words.
+getLastChunkTimestamp() {
+Checking Time: This is like looking at a clock to see when we finished the last set of words.
+if (this.processed_chunks.length === 0) {
+Checking If We Did Anything: We check if we have any sets of words yet. If not, we say we finished at time zero.
+return 0;
+Saying Time: We tell the time we finished, which is zero if we haven't started yet.
+const lastChunk = this.processed_chunks[this.processed_chunks.length - 1];
+Getting the Last Set: We look at the very last set of words we organized.
+return lastChunk.end;
+Saying the End Time: We tell the time when that last set of words finished.
+processChunk(chunk, index) {
+Organizing Words: We take a set of words (chunk) and give them a number (index). We also figure out when these words started and ended.
+}
+Finishing the Organizing: We finish organizing these words and their times.
+function createResultMessage(results, isDone, completedUntilTimestamp) {
+Sending a Full Message: We put all the organized sets of words (results) into a message. We also say if we're done or not (isDone), and we tell them when we finished the last set of words (completedUntilTimestamp).
+function createPartialResultMessage(result) {
+Sending a Part of Message: Sometimes, we don't have all the sets of words organized yet, but we still want to tell someone what we have so far. So, we send a part of our message (result) to them.
+In simple terms, this code is like collecting toys (data), putting them in boxes (chunks), turning them into words we can read (decode_asr), organizing these words nicely (processChunk), and then either sending a complete message (createResultMessage) or a partial one (createPartialResultMessage) to someone else. It's about managing and sharing information in a way that's easy to understand and use.
+
+

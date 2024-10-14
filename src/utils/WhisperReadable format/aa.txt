@@ -1,0 +1,99 @@
+chunkCallback(data) {
+    Function Definition: This line defines a function named chunkCallback that takes one parameter data.This function is likely called when new data(chunks) is received.
+        this.chunks.push(data);
+    Pushing Data to Array: It adds the data parameter to an array named chunks.This array(this.chunks) is used to store chunks of data as they come in.
+    `const [text, { chunks }] = this.pipeline.tokenizer._decode_asr(
+    kotlin
+    Copy code
+            this.chunks,
+            {
+                time_precision: this.time_precision,
+                return_timestamps: true,
+                force_full_sequence: false
+            }
+        );`
+    3. Decoding ASR Tokens: Here, it decodes the chunks of data(this.chunks) using an Automatic Speech Recognition (ASR) tokenizer(this.pipeline.tokenizer._decode_asr).ASR tokenizers are used to convert speech into text tokens.
+
+        time_precision: Specifies how precise the timestamps should be.
+            return_timestamps: Requests the tokenizer to return timestamps along with the text.
+                force_full_sequence: Likely ensures the entire sequence is processed.
+    The result is destructured into two variables:
+
+    text: Contains the decoded text from the chunks.
+        chunks: Contains additional information related to the decoded chunks.
+    `this.processed_chunks = chunks.map((chunk, index) => {
+    kotlin
+    Copy code
+            return this.processChunk(chunk, index);
+        });`
+    4. Processing Chunks: It maps over each chunk in the chunks array(from the previous step) and calls a function processChunk with each chunk and its index.The result of each processChunk call is stored in this.processed_chunks.
+
+        createResultMessage(this.processed_chunks, false, this.getLastChunkTimestamp());
+    Creating Result Message: It calls a function named createResultMessage and passes:
+    this.processed_chunks: The processed chunks from step 4.
+    false: A boolean indicating if the processing is complete(false means it's not done).
+    this.getLastChunkTimestamp(): Gets the timestamp of the last processed chunk.
+        getLastChunkTimestamp() {
+        Function Definition: Defines a function named getLastChunkTimestamp.
+            if(this.processed_chunks.length === 0) {
+        Conditional Check: Checks if the processed_chunks array is empty.
+            return 0;
+        Returning Value: If the processed_chunks array is empty, it returns 0 as the timestamp.
+    const lastChunk = this.processed_chunks[this.processed_chunks.length - 1];
+        Accessing Last Chunk: Gets the last chunk from the processed_chunks array.
+    return lastChunk.end;
+        Returning End Timestamp: Returns the end timestamp of the last chunk.
+            processChunk(chunk, index) {
+        Function Definition: Defines a function named processChunk that takes chunk and index as parameters.
+            const { text, timestamp } = chunk;
+    Destructuring: Destructures the chunk object to get text and timestamp properties.
+        const[start, end] = timestamp;
+    Destructuring Timestamp: Destructures the timestamp array into start and end variables.
+        return {
+    Returning Object: Starts returning an object literal.
+            index,
+            Index Property: Adds an index property to the returned object, representing the index of the chunk.
+                text: ${ text.trim() },
+    Text Property: Adds a text property to the returned object, trimming any extra spaces from the text.
+            start: Math.round(start),
+                Start Timestamp: Adds a start property to the returned object, rounding the start timestamp to the nearest whole number.
+                    end: Math.round(end) || Math.round(start + 0.9 * this.stride_length_s)
+    End Timestamp: Adds an end property to the returned object.If end is defined(not undefined), it rounds end to the nearest whole number.Otherwise, it calculates end as approximately 90 % (0.9) of this.stride_length_s added to start, then rounds it.
+    }
+    Object Closure: Closes the object literal.
+    }
+    Function Closure: Closes the processChunk function.
+    }
+    Class Closure: Closes the class that contains chunkCallback, getLastChunkTimestamp, and processChunk.
+function createResultMessage(results, isDone, completedUntilTimestamp) {
+    Function Definition: Defines a function named createResultMessage that takes three parameters(results, isDone, completedUntilTimestamp).
+        self.postMessage({
+            Posting Message: Uses self.postMessage to send a message to the parent thread(assuming this code runs in a web worker or similar environment).
+                type: MessageTypes.RESULT,
+            Message Type: Specifies the type of message as MessageTypes.RESULT.
+                results,
+            Results Data: Includes the results parameter in the message.
+                isDone,
+            Completion Flag: Includes isDone(a boolean indicating if processing is complete) in the message.
+                completedUntilTimestamp
+    Completion Timestamp: Includes completedUntilTimestamp(the timestamp until which processing is complete) in the message.
+    });
+    Message Closure: Closes the object passed to self.postMessage.
+    }
+    Function Closure: Closes the createResultMessage function.
+function createPartialResultMessage(result) {
+    Function Definition: Defines a function named createPartialResultMessage that takes one parameter(result).
+        self.postMessage({
+            Posting Partial Message: Uses self.postMessage to send a partial result message to the parent thread.
+                type: MessageTypes.RESULT_PARTIAL,
+            Message Type: Specifies the type of message as MessageTypes.RESULT_PARTIAL.
+                result
+    Partial Result: Includes the result parameter in the message.
+    });
+    Message Closure: Closes the object passed to self.postMessage.
+    }
+    Function Closure: Closes the createPartialResultMessage function.
+    This code essentially processes incoming data chunks, decodes them using an ASR tokenizer, processes each chunk to extract text and timestamps, and then sends the processed results either as a complete message (createResultMessage) or as a partial message(createPartialResultMessage).It manages timestamps and chunk processing efficiently to provide meaningful data outputs.
+
+
+

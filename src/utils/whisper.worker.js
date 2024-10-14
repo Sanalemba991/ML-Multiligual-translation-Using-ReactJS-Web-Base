@@ -83,13 +83,14 @@ function sendDownloadingMessage(file, progress, loaded, total) {
 
 class GenerationTracker {
     constructor(pipeline, stride_length_s) {
-        this.pipeline = pipeline;
-        this.stride_length_s = stride_length_s;
-        this.chunks = [];
+        this.pipeline = pipeline;  // This tells the machine how to understand speech.
+        this.stride_length_s = stride_length_s;  // This tells the machine how often to listen.
+        this.chunks = [];  // This is where the machine stores what it hears in small pieces.
         this.time_precision = pipeline?.processor.feature_extractor.config.chunk_length / pipeline.model.config.max_source_positions;
-        this.processed_chunks = [];
-        this.callbackFunctionCounter = 0;
+        this.processed_chunks = [];  // This is where the machine stores the parts it has finished understanding.
+        this.callbackFunctionCounter = 0;  // This helps the machine count how many times it has done something special.
     }
+    
 
     sendFinalResult() {
         self.postMessage({ type: MessageTypes.INFERENCE_DONE });
