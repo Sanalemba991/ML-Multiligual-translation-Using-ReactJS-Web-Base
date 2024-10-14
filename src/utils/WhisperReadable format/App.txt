@@ -1,0 +1,15 @@
+Worker and Effects:
+
+Initializes a worker using useRef to handle background tasks.
+Uses useEffect to set up the worker when the component mounts and to handle incoming messages from the worker.
+Audio Handling Functions:
+
+readAudioFrom(file): Converts the selected file or stream into audio data.
+handleFormSubmission(): Sends the audio data to the worker for processing.
+Rendering:
+
+Conditionally renders components (Information, Transcribing, FileDisplay, HomePage) based on the state (output, loading, isAudioAvailable).
+Event Handlers:
+
+handleAudioReset(): Resets the selected audio file or stream.
+handleFormSubmission(): Initiates the audio processing when the form is submitted.

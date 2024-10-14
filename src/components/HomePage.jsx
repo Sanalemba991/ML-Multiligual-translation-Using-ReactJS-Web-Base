@@ -82,7 +82,7 @@ export default function HomePage(props) {
                 const tempFile = e.target.files[0]
                 setFile(tempFile)
             }} className='hidden' type='file' accept='.mp3,.wave' /></label> a mp3 file</p>
-            <p className='italic text-slate-400'>Free now free forever</p>
+            <p className='italic text-slate-400'>NIELIT IMPHAL</p>
         </main>
     )
 }
